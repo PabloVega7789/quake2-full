@@ -299,14 +299,13 @@ void HelpComputer (edict_t *ent)
 		"xv 32 yv 8 picn help "			// background
 		"xv 202 yv 12 string2 \"%s\" "		// skill
 		"xv 0 yv 24 cstring2 \"%s\" "		// level name
-		"xv 0 yv 54 cstring2 \"%s\" "		// help 1
-		"xv 0 yv 110 cstring2 \"%s\" "		// help 2
+		"xv 0 yv 54 cstring2 \"Use Capture Balls to \ncapture monsters, use them \nto fight!Get Stronger after\na certain amount of kills!\" "		// help 1 has been changed
+		"xv 0 yv 110 cstring2 \"Summon Captured Monster: g\nSkill1: y  Skill2: u \nSkill3: h  Skill4: j\" "		// help 2 has been changed
 		"xv 50 yv 164 string2 \" kills     goals    secrets\" "
 		"xv 50 yv 172 string2 \"%3i/%3i     %i/%i       %i/%i\" ", 
 		sk,
 		level.level_name,
-		game.helpmessage1,
-		game.helpmessage2,
+		
 		level.killed_monsters, level.total_monsters, 
 		level.found_goals, level.total_goals,
 		level.found_secrets, level.total_secrets);
@@ -377,9 +376,30 @@ void G_SetStats (edict_t *ent)
 	}
 	else
 	{
-		item = &itemlist[ent->client->ammo_index];
-		ent->client->ps.stats[STAT_AMMO_ICON] = gi.imageindex (item->icon);
+		///////
+	if (ent->client->ammo_index >= 0 && ent->client->ammo_index < game.num_items)
+	{
+	item = &itemlist[ent->client->ammo_index];
+
+	if (item && item->icon)
+	{
+		ent->client->ps.stats[STAT_AMMO_ICON] = gi.imageindex(item->icon);
 		ent->client->ps.stats[STAT_AMMO] = ent->client->pers.inventory[ent->client->ammo_index];
+	}
+	else
+	{
+		gi.dprintf("WARNING: item or item->icon was NULL in G_SetStats\n");
+		ent->client->ps.stats[STAT_AMMO_ICON] = 0;
+		ent->client->ps.stats[STAT_AMMO] = 0;
+	}
+	}
+	else
+	{
+		gi.dprintf("WARNING: ammo_index out of bounds: %d\n", ent->client->ammo_index);
+		ent->client->ps.stats[STAT_AMMO_ICON] = 0;
+		ent->client->ps.stats[STAT_AMMO] = 0;
+	}
+	/////////
 	}
 	
 	//
