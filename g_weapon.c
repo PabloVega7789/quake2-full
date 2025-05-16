@@ -897,3 +897,51 @@ void fire_bfg (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, f
 
 	gi.linkentity (bfg);
 }
+//////////////////////////////////////////////////////////////////////
+void Captureball_Touch(edict_t* ent, edict_t* other, cplane_t* plane, csurface_t* surf)
+{
+	if (other == ent->owner || !other->inuse) {
+		return;
+	}
+
+	if ((other->svflags & SVF_MONSTER) && other->health > 0) {
+		if (ent->owner->client->has_capture) {
+			gi.cprintf(ent->owner, PRINT_HIGH, "You already have a captured monster!\n");
+		}
+		else {
+			strncpy(ent->owner->client->captured_monster, other->classname, sizeof(ent->owner->client->captured_monster) - 1);
+			ent->owner->client->captured_monster[sizeof(ent->owner->client->captured_monster) - 1] = '\0';
+			gi.cprintf(ent->owner, PRINT_HIGH, "Captured a %s!\n", other->classname);
+			G_FreeEdict(other); // Remove the monster
+		}
+	}
+
+	G_FreeEdict(ent);
+}
+
+
+void fire_captureball(edict_t* self, vec3_t start, vec3_t aimdir, int speed)
+{
+	edict_t* ball;
+
+	ball = G_Spawn();
+	VectorCopy(start, ball->s.origin);
+	VectorCopy(aimdir, ball->movedir);
+	vectoangles(aimdir, ball->s.angles);
+	VectorScale(aimdir, speed, ball->velocity);
+
+	ball->movetype = MOVETYPE_BOUNCE;
+	ball->clipmask = MASK_SHOT;
+	ball->solid = SOLID_BBOX;
+	ball->s.modelindex = gi.modelindex("models/objects/grenade/tris.md2");
+	ball->owner = self;
+	ball->classname = "captureball";
+	ball->touch = Captureball_Touch;
+	ball->nextthink = level.time + 10;
+	ball->think = G_FreeEdict; // Remove if it doesn't hit anything
+
+	VectorSet(ball->mins, -4, -4, -4);
+	VectorSet(ball->maxs, 4, 4, 4);
+
+	gi.linkentity(ball);
+}
