@@ -1111,7 +1111,7 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 }
 
 //======================================================================
-
+void Weapon_CaptureBall(edict_t* ent); ///////////////
 gitem_t	itemlist[] = 
 {
 	{
@@ -1496,6 +1496,30 @@ always owned, never in the world
 		0,
 /* precache */ "weapons/rg_hum.wav"
 	},
+///////
+{
+	"weapon_captureball",                // classname
+	Pickup_Weapon,                       // pickup function
+	Use_Weapon,
+	Drop_Weapon,
+	Weapon_CaptureBall,                 // weapon function
+	"misc/w_pkup.wav",                  // pickup sound
+	"models/weapons/g_launcher/tris.md2", EF_ROTATE,   //world model
+	"models/weapons/v_launcher/tris.md2", // view model
+	"w_glauncher",                        // icon name
+	"Capture Ball",                    // pickup name
+	0,
+	1,
+	"Grenades",
+	IT_WEAPON|IT_STAY_COOP,
+	WEAP_GRENADELAUNCHER,
+	NULL,
+	0,
+	""
+},
+//////
+
+
 
 /*QUAKED weapon_bfg (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
