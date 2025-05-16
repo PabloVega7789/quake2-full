@@ -961,5 +961,28 @@ void SP_worldspawn (edict_t *ent)
 
 	// 63 testing
 	gi.configstring(CS_LIGHTS+63, "a");
-}
 
+	
+}
+	//////
+	void G_CallSpawn(edict_t* ent)
+	{
+		spawn_t* s;
+	
+		// Check if the entity has a classname
+		if (!ent->classname || ent->classname[0] == '\0') {
+			gi.dprintf("G_CallSpawn: Entity has no classname\n");
+			return;
+		}
+	
+		// Iterate over spawn functions and call the correct one
+		for (s = spawns; s->name; s++) {
+			if (!strcmp(s->name, ent->classname)) {
+				s->spawn(ent);  // Call the spawn function for the specific entity
+				return;
+			}
+		}
+	
+		gi.dprintf("G_CallSpawn: No spawn function for %s\n", ent->classname);
+	}
+	//////
