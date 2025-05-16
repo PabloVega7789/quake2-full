@@ -879,7 +879,68 @@ void Cmd_PlayerList_f(edict_t *ent)
 	}
 	gi.cprintf(ent, PRINT_HIGH, "%s", text);
 }
+///////////////////////////
+void Cmd_Summon_f(edict_t* ent)
+{
+	SummonCapturedMonster(ent);
+}
+void Cmd_UseSkill1_f(edict_t* ent) {
+	edict_t* mon = ent->client->summoned_monster;
+	if (!mon) {
+		gi.cprintf(ent, PRINT_HIGH, "You have no summoned monster!\n");
+		return;
+	}
+	if (mon->skills[0]) {
+		mon->skills[0](mon);
+	}
+	else {
+		gi.cprintf(ent, PRINT_HIGH, "Skill 1 is not defined!\n");
+	}
+}
 
+void Cmd_UseSkill2_f(edict_t* ent) {
+	edict_t* mon = ent->client->summoned_monster;
+	if (!mon) {
+		gi.cprintf(ent, PRINT_HIGH, "You have no summoned monster!\n");
+		return;
+	}
+	if (mon->skills[1]) {
+		mon->skills[1](mon);
+	}
+	else {
+		gi.cprintf(ent, PRINT_HIGH, "Skill 2 is not defined!\n");
+	}
+}
+
+void Cmd_UseSkill3_f(edict_t* ent) {
+	edict_t* mon = ent->client->summoned_monster;
+	if (!mon) {
+		gi.cprintf(ent, PRINT_HIGH, "You have no summoned monster!\n");
+		return;
+	}
+	if (mon->skills[2]) {
+		mon->skills[2](mon);
+	}
+	else {
+		gi.cprintf(ent, PRINT_HIGH, "Skill 3 is not defined!\n");
+	}
+}
+
+void Cmd_UseSkill4_f(edict_t* ent) {
+	edict_t* mon = ent->client->summoned_monster;
+	if (!mon) {
+		gi.cprintf(ent, PRINT_HIGH, "You have no summoned monster!\n");
+		return;
+	}
+	if (mon->skills[3]) {
+		mon->skills[3](mon);
+	}
+	else {
+		gi.cprintf(ent, PRINT_HIGH, "Skill 4 is not defined!\n");
+	}
+}
+
+///////////////////
 
 /*
 =================
@@ -920,6 +981,29 @@ void ClientCommand (edict_t *ent)
 		Cmd_Help_f (ent);
 		return;
 	}
+
+	///////////////////
+	else if (Q_stricmp(cmd, "summon") == 0)
+	{
+		Cmd_Summon_f(ent);
+	}
+	else if (Q_stricmp(cmd, "skill1") == 0)
+	{
+		Cmd_UseSkill1_f(ent);
+	}
+	else if (Q_stricmp(cmd, "skill2") == 0)
+	{
+		Cmd_UseSkill2_f(ent);
+	}
+	else if (Q_stricmp(cmd, "skill3") == 0)
+	{ 
+		Cmd_UseSkill3_f(ent);
+	}
+	else if (Q_stricmp(cmd, "skill4") == 0)
+	{
+		Cmd_UseSkill4_f(ent);
+	}
+	//////////////////
 
 	if (level.intermissiontime)
 		return;
