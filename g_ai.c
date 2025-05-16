@@ -390,7 +390,13 @@ qboolean FindTarget (edict_t *self)
 	edict_t		*client;
 	qboolean	heardit;
 	int			r;
+	///////////////
+	if (self->summoned_by && client == self->summoned_by)
+		return false;
+	////////////////
 
+
+	
 	if (self->monsterinfo.aiflags & AI_GOOD_GUY)
 	{
 		if (self->goalentity && self->goalentity->inuse && self->goalentity->classname)
