@@ -62,6 +62,14 @@
 
 #define BODY_QUEUE_SIZE		8
 
+// Forward declare edict_t so we can use it in the function pointer
+typedef struct edict_s edict_t;
+
+// Function pointer type for a monster skill
+typedef void (*monster_skill_func)(edict_t* monster);
+
+
+
 typedef enum
 {
 	DAMAGE_NO,
@@ -941,6 +949,15 @@ struct gclient_s
 
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?
+	////////////////
+	edict_t* summoned_monster;
+	char     captured_monster[64];  // Stores the class name
+	
+	qboolean has_capture;
+	///////////////
+};
+
+
 };
 
 
@@ -1091,5 +1108,10 @@ struct edict_s
 	// common data blocks
 	moveinfo_t		moveinfo;
 	monsterinfo_t	monsterinfo;
+
+	///////
+	edict_t* ally_owner;
+	edict_t* summoned_by;  // points back to the owner/player
+	monster_skill_func skills[4];  // skill function pointers
 };
 
