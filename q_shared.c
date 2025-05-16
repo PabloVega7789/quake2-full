@@ -1160,6 +1160,14 @@ void Com_PageInMemory (byte *buffer, int size)
 // FIXME: replace all Q_stricmp with Q_strcasecmp
 int Q_stricmp (char *s1, char *s2)
 {
+/////////////////
+// Optional: log the issue for debugging
+if ((uintptr_t)s1 < 0x1000 || (uintptr_t)s2 < 0x1000) {
+	
+	return 1; // treat invalid pointers as not equal
+}
+////////////////
+
 #if defined(WIN32)
 	return _stricmp (s1, s2);
 #else
