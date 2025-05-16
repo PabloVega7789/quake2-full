@@ -408,6 +408,16 @@ void monster_think (edict_t *self)
 	M_CatagorizePosition (self);
 	M_WorldEffects (self);
 	M_SetEffects (self);
+
+	//////////
+	if (!self->enemy && self->summoned_by && self->summoned_by->enemy) 
+	{
+		self->enemy = self->summoned_by->enemy;
+		FoundTarget(self);
+	}
+	
+	///////////
+		
 }
 
 
