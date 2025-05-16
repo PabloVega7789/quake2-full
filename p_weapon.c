@@ -679,6 +679,35 @@ void Weapon_Grenade (edict_t *ent)
 	}
 }
 
+//////////////
+
+void weapon_CaptureBall_Fire(edict_t* ent)
+{
+	vec3_t start, forward, right;
+	vec3_t offset = { 8, 8, ent->viewheight - 8 };
+	ent->client->ammo_index = ITEM_INDEX(FindItem("Grenades"));
+
+	AngleVectors(ent->client->v_angle, forward, right, NULL);
+	P_ProjectSource(ent->client, ent->s.origin, offset, forward, right, start);
+
+	fire_captureball(ent, start, forward, 600);
+	
+
+	ent->client->ps.gunframe++;
+}
+
+void Weapon_CaptureBall(edict_t* ent)
+{
+	static int pause_frames[] = { 19, 32, 0 };
+	static int fire_frames[] = { 5, 0 };
+
+	Weapon_Generic(ent, 4, 5, 52, 55, pause_frames, fire_frames, weapon_CaptureBall_Fire);
+}
+
+
+//////////////
+
+
 /*
 ======================================================================
 
